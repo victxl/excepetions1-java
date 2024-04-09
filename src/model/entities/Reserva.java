@@ -43,9 +43,16 @@ public class Reserva {
         return diferenca.toDays();
     }
 
-    public void dataUpdate(LocalDate checkIn, LocalDate checkOut) {
+    public String dataUpdate(LocalDate checkIn, LocalDate checkOut) {
+    	if (!checkIn.isAfter(LocalDate.now()) || !checkOut.isAfter(LocalDate.now())) {
+		    return"Erro na reserva: A data de reserva para atualização deve ser no futuro!";
+		}
+    	if (!checkOut.isAfter(checkIn)) {
+    		return"Erro de reserva: A data de check-out deve ser posterior à data de check-in";
+		}
         this.checkIn = checkIn;
         this.checkOut = checkOut;
+        return null;
     }
 
     @Override
