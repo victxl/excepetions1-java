@@ -3,12 +3,17 @@ package model.entities;
 import java.time.Duration;
 import java.time.LocalDate;
 
+import model.exception.DominionException;
+
 public class Reserva {
     private Integer numeroQuarto;
     private LocalDate checkIn;
     private LocalDate checkOut;
 
-    public Reserva(Integer numeroQuarto, LocalDate checkIn, LocalDate checkOut) {
+    public Reserva(Integer numeroQuarto, LocalDate checkIn, LocalDate checkOut)  {
+    	if (!checkOut.isAfter(checkIn)) {
+    		throw new DominionException("Erro de reserva: A data de check-out deve ser posterior à data de check-in");
+		}
         this.numeroQuarto = numeroQuarto;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
@@ -43,16 +48,16 @@ public class Reserva {
         return diferenca.toDays();
     }
 
-    public String dataUpdate(LocalDate checkIn, LocalDate checkOut) {
+    public void dataUpdate(LocalDate checkIn, LocalDate checkOut)  {
     	if (!checkIn.isAfter(LocalDate.now()) || !checkOut.isAfter(LocalDate.now())) {
-		    return"Erro na reserva: A data de reserva para atualização deve ser no futuro!";
+		    throw new DominionException("Erro na reserva: A data de reserva para atualização deve ser no futuro!");
 		}
     	if (!checkOut.isAfter(checkIn)) {
-    		return"Erro de reserva: A data de check-out deve ser posterior à data de check-in";
+    		throw new DominionException("Erro de reserva: A data de check-out deve ser posterior à data de check-in");
 		}
         this.checkIn = checkIn;
         this.checkOut = checkOut;
-        return null;
+        
     }
 
     @Override
